@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class Result extends StatelessWidget {
   final int resultScore;
+
   final VoidCallback resetHandler;
   Result(this.resultScore, this.resetHandler);
   String get resultPhrase {
     String resultText;
     if (resultScore <= 8) {
-      resultText = 'You are awesome and innocent!';
+      resultText = 'You are awesome!';
     } else if (resultScore <= 12) {
       resultText = 'Pretty likeable!';
     } else if (resultScore <= 16) {
@@ -21,8 +23,11 @@ class Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity,
       child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               resultPhrase,
@@ -32,7 +37,7 @@ class Result extends StatelessWidget {
             FlatButton(
               onPressed: resetHandler,
               child: Text('Restart Quiz'),
-              color: Colors.blue,
+              color: Theme.of(context).primaryColor,
               textColor: Colors.white,
             )
           ],

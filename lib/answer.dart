@@ -5,16 +5,18 @@ class Answer extends StatelessWidget {
   final VoidCallback stateHandler;
   final String answerText;
   Answer(this.stateHandler, this.answerText);
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
+        width: 300,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
+            primary: Theme.of(context).primaryColor,
           ),
           child: Text(answerText),
-          onPressed:stateHandler,
+          onPressed: stateHandler,
         ));
   }
 }

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import './quiz.dart';
 import './result.dart';
+import './themes.dart';
+import './custom_theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    CustomTheme(
+      initialThemeKey: MyThemeKeys.BLUE,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -21,7 +28,7 @@ class _MyAppState extends State<MyApp> {
         {'text': 'Black', 'score': 10},
         {'text': 'Red', 'score': 5},
         {'text': 'Green', 'score': 3},
-        {'text': 'White', 'score': 1}
+        {'text': 'Yellow', 'score': 1}
       ],
     },
     {
@@ -36,10 +43,10 @@ class _MyAppState extends State<MyApp> {
     {
       'questionText': 'What\'s your favorite instructor?',
       'answers': [
-        {'text': 'Bao', 'score': 1},
-        {'text': 'Max', 'score': 5},
-        {'text': 'Jack', 'score': 9},
-        {'text': 'Lawvien', 'score': 12},
+        {'text': 'Dr. Shahida', 'score': 1},
+        {'text': 'Dr. Zatul', 'score': 5},
+        {'text': 'Dr. Halina', 'score': 9},
+        {'text': 'Dr. Zahpira', 'score': 12},
       ],
     },
   ];
@@ -47,15 +54,44 @@ class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
   var _totalScore = 0;
 
-void _resetQuiz() {
-  setState(() {
-  _questionIndex = 0;
-  _totalScore = 0;
-  });
-}
-void _answerQuestion(int score) {
+  void _changeTheme(BuildContext buildContext, MyThemeKeys key) {
+    CustomTheme.instanceOf(buildContext).changeTheme(key);
+  }
+
+
+  void selectThemeColor(int score, BuildContext context) {
+    if (_questionIndex == 0) {
+    switch (score) {
+      case 10:
+        _changeTheme(context, MyThemeKeys.BLACK);
+        break;
+      case 5:
+        _changeTheme(context, MyThemeKeys.RED);
+        break;
+      case 3:
+        _changeTheme(context, MyThemeKeys.GREEN);
+        break;
+      case 1:
+        _changeTheme(context, MyThemeKeys.YELLOW);
+        break;
+      default:
+        _changeTheme(context, MyThemeKeys.BLUE);
+    }
+    }
+  }
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score, BuildContext context) {
+
+selectThemeColor(score, context);
+
     _totalScore += score;
-    print('NOTICE: MyApp answerQuestion func triggered score is $_totalScore');
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -64,13 +100,15 @@ void _answerQuestion(int score) {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: CustomTheme.of(context),
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
         body: (_questionIndex < _questions.length)
             ? Quiz(
-                answerQuestions: (_totalScore) => _answerQuestion(_totalScore),
+                answerQuestions: (_totalScore, context) =>
+                    _answerQuestion(_totalScore, context),
                 questionIndex: _questionIndex,
                 questions: _questions)
             : Result(_totalScore, _resetQuiz),

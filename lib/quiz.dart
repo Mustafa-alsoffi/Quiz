@@ -19,11 +19,13 @@ class Quiz extends StatelessWidget {
         ),
         ...(questions[questionIndex]['answers'] as List<Map<String, Object>>)
             .map((answer) {
-          print(answer['score']);
-          return Answer(() => answerQuestions(answer['score']),
+          print('NOTICE: Bulding buttons...');
+          return Answer(
+              () => answerQuestions(answer['score'], context),
               answer['text'].toString());
         }).toList(),
       ],
+      mainAxisAlignment: MainAxisAlignment.center,
     );
   }
 }
